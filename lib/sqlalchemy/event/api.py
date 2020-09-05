@@ -96,6 +96,17 @@ def listen(target, identifier, fn, *args, **kw):
 
     """
 
+    if util.concurrency.iscoroutinefunction(fn):
+        await_ = (
+            util.concurrency.await_fallback
+            if kw.pop("async_fallback", False)
+            else util.concurrency.await_only
+        )
+        listener = fn
+
+        def fn(*_args, **kwargs):
+            return await_(listener(*_args, **kwargs))
+
     _event_key(target, identifier, fn).listen(*args, **kw)
 
 

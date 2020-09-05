@@ -9,6 +9,7 @@ if compat.py3k:
         pass
     else:
         have_greenlet = True
+        from inspect import iscoroutinefunction
         from ._concurrency_py3k import await_only
         from ._concurrency_py3k import await_fallback
         from ._concurrency_py3k import greenlet_spawn
@@ -48,3 +49,6 @@ if not have_greenlet:
 
     def _util_async_run_coroutine_function(fn, *arg, **kw):  # noqa F81
         _not_implemented()
+
+    def iscoroutinefunction(fn):
+        return False
